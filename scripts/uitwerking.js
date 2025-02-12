@@ -13,54 +13,24 @@ document.addEventListener("touchstart", function(event) {
     }
 }, true);
 
-
-getMyImage();
-
-function getMyImage() {
-    getData(urlMe).then( data => {  
-        // console.log("Full data:", data);  // Log de volledige response om de structuur te controleren
-
-        const myData = data.data;
-        // console.log("myData:", myData);  // Log de 'data' om te zien of 'custom' en 'photos' daar in zitten
-
-        if (myData && myData.custom) {
-            // Parse de custom string naar een object
-            const customData = JSON.parse(myData.custom);
-            console.log("Custom data:", customData);
-
-            if (customData.photos) {
-                let myPhotos = customData.photos;
-                console.log("myPhotos:", myPhotos);  // Log de photos array
-            } else {
-                console.error("Photos niet gevonden in custom.");
-            }
-        } else {
-            console.error("Custom niet gevonden.");
-        }
-    }).catch(error => {
-        console.error("Error fetching data:", error);  // Log de fout als er iets misgaat
-    });
-}
-
 let page = 1;
 let fetching = false;
-const container = document.getElementById('container');
+const container = document.querySelector('#container');
 const cols = Array.from(container.getElementsByClassName('col'));
 console.log(cols);
 
 const fetchImageData = async () => {
     try {
         fetching = true;
-        document.getElementById('loader').style.display = 'block';
+        document.querySelector('#loader').style.display = 'block';
         
-        // Haal de foto data op (je kunt deze aanroepen binnen de getMyImage functie)
-        const data = await getData(urlMe);  // De getData functie roept getMyImage aan, deze kan je aanpassen naar je endpoint
-        
-        // Haal de 'photos' uit de data
+        const data = await getData(urlMe);
         const myData = data.data;
         const customData = JSON.parse(myData.custom);
         const photos = customData.photos;
-        
+
+        console.log("Opgehaalde foto's:", photos); // Debugging (kan later weg)
+
         fetching = false;
         return photos;
     } catch (error) {
@@ -70,6 +40,7 @@ const fetchImageData = async () => {
     }
 };
 
+// Eerste keer data ophalen
 fetchImageData().then((photos) => {
     if (photos.length > 0) {
         photos.forEach((photo, index) => {
@@ -79,6 +50,7 @@ fetchImageData().then((photos) => {
 }).catch((error) => {
     console.error("Error initial fetch:", error);
 });
+
 
 const createCard = (photo, col) => {
     const card = document.createElement('div');
@@ -97,7 +69,7 @@ const createCard = (photo, col) => {
     
     // Verberg de loader als de afbeelding geladen is
     img.onload = function() {
-        document.getElementById('loader').style.display = "none";  // Verberg loader na het laden van afbeelding
+        document.querySelector('#loader').style.display = "none";  // Verberg loader na het laden van afbeelding
     };
     
     // Maak de overlay aan
@@ -181,8 +153,6 @@ for(let i = 0; i < box.length; i++ ){
         box[i].style.animationDuration = 1+duration+'s';
         box[i].style.backgroundColor = randomColor;
     });
-
-    console.log(randomColor)
 }
 
 // stop animatie button
