@@ -7,11 +7,17 @@ const endpointSquad = 'items/person/?filter={"squads":{"squad_id":15}}';
 const urlMe = baseURL + endpointMe;
 const urlSquad = baseURL + endpointSquad;
 
+// mobile active/hover 
 document.addEventListener("touchstart", function(event) {
     if (event.target.classList.contains("box")) {
         event.target.classList.add("active");
     }
 }, true);
+
+
+// pinterest section
+// basisopzet:
+// https://www.youtube.com/watch?v=7QlMASPUjws
 
 let page = 1;
 let fetching = false;
@@ -121,8 +127,9 @@ async /*9*/ function getData(URL) {
 	);
 }
 
-
 // ANIMATIE SCRIPT
+// basisopzet:
+// https://www.youtube.com/watch?v=zMyfONhgvyA
 
 // Definieer een array van kleuren voor hover
 
